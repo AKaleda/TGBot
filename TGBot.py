@@ -7,8 +7,10 @@ from telebot import types
 # To unset an environment variable> , set varname= 
 # To see all environment variables> set
 
-# Find @botfather in Telegram, start it and create new bot by command /newbot
-# @botfather will return TOKEN like 6548648010:A...Vpk
+# Find @botfather in Telegram, start it and create new bot by command /newbot 
+# AKaledaPhotoAudio_bot
+# Обращение t.me/AKaledaPhotoAudio_bot
+# @botfather will return PRIVATE TOKEN like 6548648010:A...Vpk
 # Set environment variable AKaleda_bot_TOKEN by cmd> set AKaleda_bot_TOKEN=6548648010:A...Vpk
 # Start python TGBot.py
 
@@ -17,31 +19,30 @@ print(token)
 
 bot = telebot.TeleBot(token)
 
-@bot.message_handler(commands=['start'])
-def start(message):
-    markup = types.InlineKeyboardMarkup()
+@bot.message_handler(commands=['start'])    # декоратор по обработке команд к телеботу
+def start(message):                         # /start
+    markup = types.InlineKeyboardMarkup()   # разметка экрана, общее окно
     getCode = types.InlineKeyboardButton(text='See Code', url='https://github.com/AKaleda/TGBot/blob/main/TGBot.py')
     markup.add(getCode)
-    bot.send_message(message.from_user.id, "See Code at GitHub", reply_markup = markup)
+    bot.send_message(message.from_user.id, "See Code at GitHub", reply_markup = markup) # послать message и ответы получать в этот бот
 
-    markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
-    btnP = types.KeyboardButton("Pictures")
-    btnA = types.KeyboardButton('Audio')
-    markup.add(btnP, btnA)
-    bot.send_message(message.from_user.id, "Select action", reply_markup=markup)
+    markup = types.ReplyKeyboardMarkup(resize_keyboard=True) # разрешить resize_keyboard
+    btnP = types.KeyboardButton("Pictures")                  # создать button
+    btnA = types.KeyboardButton('Audio')                     # создать button
+    markup.add(btnP, btnA)                                   # положить на экран
+    bot.send_message(message.from_user.id, "Select action", reply_markup=markup) #послать message
 
-@bot.message_handler(content_types=['text'])
-def get_text_messages(message):
+@bot.message_handler(content_types=['text'])                 # Контроль входных действий (actions)
+def get_text_messages(message):                              # получить сообщение
     if message.text == 'Pictures':
-        #tb.send_chat_action(message.chat.id, 'upload_photo')
         img = open('photo1.jpg', 'rb')
-        bot.send_photo(message.chat.id, img, reply_to_message_id=message.message_id)
+        bot.send_photo(message.chat.id, img, reply_to_message_id=message.message_id)    # послать картинку в бот
         img.close()
 
     if message.text == 'Audio':
         audio = open(r'C:\Windows\Media\Alarm01.wav', 'rb')
-        bot.send_audio(message.chat.id, audio)
+        bot.send_audio(message.chat.id, audio)               # послать аудио в бот
         audio.close()
 
-bot.infinity_polling()
+bot.infinity_polling()      # запустить в бесконечный цикл
 
